@@ -2,6 +2,8 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
+using Microsoft.AspNetCore.Hosting;
+
 
 public class ProgramTest : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -15,7 +17,11 @@ public class ProgramTest : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task GetWeatherForecast_ReturnsValidResponse()
     {
-        var client = _factory.CreateClient();
+        var client = _factory.WithWebHostBuilder(builder =>
+{
+    builder.UseEnvironment("Testing");
+}).CreateClient();
+
         var response = await client.GetAsync("/weatherforecast");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -41,4 +47,3 @@ public class ProgramTest : IClassFixture<WebApplicationFactory<Program>>
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }
-
