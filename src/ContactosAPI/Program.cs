@@ -7,18 +7,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-if (!app.Environment.IsEnvironment("Testing"))
-{
-    app.UseHttpsRedirection();
-}
-
+app.UseSwagger();
+app.UseSwaggerUI();
+//app.UseHttpsRedirection();
 
 var summaries = new[]
 {
@@ -38,6 +29,8 @@ app.MapGet("/weatherforecast", () =>
     return Results.Ok(forecast);
 })
 .WithName("GetWeatherForecast");
+
+app.Urls.Add("http://0.0.0.0:8080");
 
 app.Run();
 
